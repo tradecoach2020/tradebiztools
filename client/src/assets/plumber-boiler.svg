@@ -1,0 +1,134 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#1a1a1a"/>
+  
+  <!-- Wall with texture -->
+  <rect x="0" y="0" width="400" height="200" fill="#2d2d2d"/>
+  <rect x="0" y="0" width="400" height="200" fill="url(#wallTexture)" opacity="0.1"/>
+  
+  <!-- Floor -->
+  <rect x="0" y="200" width="400" height="100" fill="#333"/>
+  
+  <!-- Define patterns -->
+  <defs>
+    <pattern id="wallTexture" patternUnits="userSpaceOnUse" width="4" height="4">
+      <rect width="4" height="4" fill="#2d2d2d"/>
+      <circle cx="2" cy="2" r="0.5" fill="#404040"/>
+    </pattern>
+    
+    <!-- Hair texture -->
+    <pattern id="hairTexture" patternUnits="userSpaceOnUse" width="2" height="2">
+      <rect width="2" height="2" fill="#8b4513"/>
+      <circle cx="1" cy="1" r="0.3" fill="#654321"/>
+    </pattern>
+  </defs>
+  
+  <!-- Boiler -->
+  <rect x="250" y="50" width="120" height="140" fill="#e8e8e8" stroke="#ccc" stroke-width="2" rx="5"/>
+  <rect x="260" y="60" width="100" height="120" fill="#f5f5f5" stroke="#ddd" stroke-width="1" rx="3"/>
+  
+  <!-- Boiler controls -->
+  <circle cx="290" cy="90" r="8" fill="#3b82f6"/>
+  <circle cx="320" cy="90" r="8" fill="#10b981"/>
+  <rect x="275" y="110" width="50" height="15" fill="#374151" rx="2"/>
+  <rect x="275" y="130" width="30" height="10" fill="#6b7280" rx="1"/>
+  
+  <!-- Boiler display -->
+  <rect x="275" y="150" width="50" height="20" fill="#000" rx="2"/>
+  <text x="300" y="163" text-anchor="middle" fill="#3b82f6" font-family="monospace" font-size="8">75°C</text>
+  
+  <!-- Copper pipes with realistic color -->
+  <rect x="240" y="60" width="8" height="30" fill="#b87333" stroke="#8b4513" stroke-width="1"/>
+  <rect x="200" y="85" width="50" height="8" fill="#b87333" stroke="#8b4513" stroke-width="1"/>
+  <rect x="195" y="85" width="8" height="40" fill="#b87333" stroke="#8b4513" stroke-width="1"/>
+  
+  <!-- Realistic Plumber figure -->
+  <!-- Head with better proportions -->
+  <ellipse cx="150" cy="115" rx="18" ry="20" fill="#fdbcb4"/>
+  
+  <!-- Facial features -->
+  <ellipse cx="144" cy="112" rx="2" ry="1" fill="#333"/>
+  <ellipse cx="156" cy="112" rx="2" ry="1" fill="#333"/>
+  <path d="M 148 118 Q 150 120 152 118" stroke="#333" stroke-width="1" fill="none"/>
+  <ellipse cx="150" cy="116" rx="1" ry="1.5" fill="#d4816b"/>
+  
+  <!-- Hair under hard hat -->
+  <path d="M 132 105 Q 140 100 148 102 Q 152 100 160 102 Q 168 100 168 108" fill="url(#hairTexture)"/>
+  
+  <!-- Hard hat with company logo -->
+  <ellipse cx="150" cy="100" rx="22" ry="12" fill="#f59e0b"/>
+  <rect x="145" y="98" width="10" height="4" fill="#dc2626"/>
+  <text x="150" y="102" text-anchor="middle" fill="white" font-family="Arial" font-size="6" font-weight="bold">TC</text>
+  
+  <!-- Neck -->
+  <rect x="145" y="135" width="10" height="8" fill="#fdbcb4"/>
+  
+  <!-- Body with realistic proportions -->
+  <rect x="130" y="143" width="40" height="55" fill="#1e40af" rx="8"/>
+  
+  <!-- High-vis vest with reflective stripes -->
+  <rect x="133" y="146" width="34" height="45" fill="#eab308" opacity="0.9" rx="6"/>
+  <rect x="135" y="155" width="30" height="4" fill="#f97316"/>
+  <rect x="135" y="165" width="30" height="4" fill="#f97316"/>
+  <rect x="135" y="175" width="30" height="4" fill="#f97316"/>
+  
+  <!-- Company logo on vest -->
+  <circle cx="150" cy="160" r="8" fill="white" opacity="0.8"/>
+  <text x="150" y="163" text-anchor="middle" fill="#1e40af" font-family="Arial" font-size="6" font-weight="bold">TC</text>
+  
+  <!-- Arms with muscle definition -->
+  <ellipse cx="120" cy="155" rx="8" ry="18" fill="#fdbcb4" transform="rotate(-15 120 155)"/>
+  <ellipse cx="180" cy="155" rx="8" ry="18" fill="#fdbcb4" transform="rotate(15 180 155)"/>
+  
+  <!-- Hands with realistic skin tone -->
+  <circle cx="108" cy="165" r="6" fill="#fdbcb4"/>
+  <circle cx="192" cy="165" r="6" fill="#fdbcb4"/>
+  
+  <!-- Professional tools -->
+  <rect x="185" y="160" width="15" height="4" fill="#64748b" rx="2"/>
+  <circle cx="198" cy="162" r="3" fill="#64748b"/>
+  <rect x="100" y="163" width="12" height="4" fill="#64748b" rx="2"/>
+  
+  <!-- Legs with work trousers -->
+  <rect x="140" y="198" width="10" height="30" fill="#1e40af" rx="3"/>
+  <rect x="155" y="198" width="10" height="30" fill="#1e40af" rx="3"/>
+  
+  <!-- Knee pads -->
+  <rect x="139" y="210" width="12" height="8" fill="#374151" rx="4"/>
+  <rect x="154" y="210" width="12" height="8" fill="#374151" rx="4"/>
+  
+  <!-- Professional work boots -->
+  <rect x="138" y="228" width="15" height="10" fill="#451a03" rx="3"/>
+  <rect x="152" y="228" width="15" height="10" fill="#451a03" rx="3"/>
+  <rect x="140" y="235" width="11" height="3" fill="#7c2d12"/>
+  <rect x="154" y="235" width="11" height="3" fill="#7c2d12"/>
+  
+  <!-- Professional tool bag -->
+  <rect x="75" y="185" width="35" height="25" fill="#7c2d12" rx="4"/>
+  <rect x="80" y="180" width="25" height="10" fill="#92400e" rx="3"/>
+  <circle cx="105" cy="185" r="2" fill="#fbbf24"/>
+  
+  <!-- Tools organized in bag -->
+  <rect x="82" y="175" width="3" height="12" fill="#64748b"/>
+  <rect x="87" y="173" width="3" height="14" fill="#64748b"/>
+  <rect x="92" y="176" width="3" height="11" fill="#64748b"/>
+  <rect x="97" y="174" width="3" height="13" fill="#dc2626"/>
+  
+  <!-- Steam from boiler -->
+  <path d="M 310 50 Q 312 45 310 40 Q 308 35 310 30" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M 320 48 Q 322 43 320 38 Q 318 33 320 28" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M 330 52 Q 332 47 330 42 Q 328 37 330 32" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.6"/>
+  
+  <!-- Success indicators -->
+  <circle cx="350" cy="30" r="18" fill="#10b981"/>
+  <path d="M 340 30 L 347 37 L 360 24" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+  
+  <!-- Professional certification badge -->
+  <circle cx="50" cy="50" r="25" fill="#3b82f6" stroke="white" stroke-width="3"/>
+  <text x="50" y="45" text-anchor="middle" fill="white" font-family="Arial" font-size="8" font-weight="bold">GAS</text>
+  <text x="50" y="55" text-anchor="middle" fill="white" font-family="Arial" font-size="8" font-weight="bold">SAFE</text>
+  
+  <!-- Professional text -->
+  <text x="200" y="280" text-anchor="middle" fill="#3b82f6" font-family="Arial, sans-serif" font-size="14" font-weight="bold">CERTIFIED PROFESSIONAL</text>
+  <text x="200" y="295" text-anchor="middle" fill="#10b981" font-family="Arial, sans-serif" font-size="10">QUALITY GUARANTEED</text>
+</svg>

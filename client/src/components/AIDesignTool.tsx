@@ -1,0 +1,715 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { 
+  Sparkles, 
+  Camera, 
+  Upload, 
+  XCircle, 
+  LayoutPanelTop, 
+  Loader2, 
+  Image as ImageIcon,
+  Download,
+  Share2,
+  RefreshCw
+} from "lucide-react";
+
+// Project type definitions
+const projectTypes = [
+  { id: "garden", name: "Garden / Landscaping", icon: "🌿" },
+  { id: "bathroom", name: "Bathroom Renovation", icon: "🚿" },
+  { id: "kitchen", name: "Kitchen Remodel", icon: "🍳" },
+  { id: "bedroom", name: "Bedroom Design", icon: "🛏️" },
+  { id: "living_room", name: "Living Room", icon: "🛋️" },
+  { id: "outdoor", name: "Outdoor Space", icon: "⛱️" }
+];
+
+// Design styles
+const designStyles = [
+  { id: "modern", name: "Modern & Minimalist" },
+  { id: "traditional", name: "Traditional & Classic" },
+  { id: "industrial", name: "Industrial" },
+  { id: "scandinavian", name: "Scandinavian" },
+  { id: "rustic", name: "Rustic & Country" },
+  { id: "contemporary", name: "Contemporary" },
+  { id: "coastal", name: "Coastal / Beach" },
+  { id: "bohemian", name: "Bohemian / Eclectic" },
+  { id: "farmhouse", name: "Modern Farmhouse" }
+];
+
+type Step = "select-project" | "project-details" | "design-preferences" | "upload-photos" | "review" | "generating" | "results";
+
+const AIDesignTool = () => {
+  const [currentStep, setCurrentStep] = useState<Step>("select-project");
+  const [projectType, setProjectType] = useState<string | null>(null);
+  const [projectDetails, setProjectDetails] = useState({
+    dimensions: "",
+    budget: "",
+    timeline: "",
+    requirements: ""
+  });
+  const [designPreferences, setDesignPreferences] = useState({
+    style: "",
+    colors: "",
+    materials: "",
+    mustHave: "",
+    avoid: ""
+  });
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [photosPreviews, setPhotosPreviews] = useState<string[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedDesigns, setGeneratedDesigns] = useState<string[]>([]);
+  const [selectedDesign, setSelectedDesign] = useState<number | null>(null);
+  
+  // Handle project type selection
+  const handleSelectProject = (type: string) => {
+    setProjectType(type);
+    setCurrentStep("project-details");
+  };
+  
+  // Handle project details update
+  const handleProjectDetailsChange = (field: string, value: string) => {
+    setProjectDetails({
+      ...projectDetails,
+      [field]: value
+    });
+  };
+  
+  // Handle design preferences update
+  const handleDesignPreferencesChange = (field: string, value: string) => {
+    setDesignPreferences({
+      ...designPreferences,
+      [field]: value
+    });
+  };
+  
+  // Move to the next step
+  const goToNextStep = () => {
+    if (currentStep === "project-details") {
+      setCurrentStep("design-preferences");
+    } else if (currentStep === "design-preferences") {
+      setCurrentStep("upload-photos");
+    } else if (currentStep === "upload-photos") {
+      setCurrentStep("review");
+    } else if (currentStep === "review") {
+      // Start generation
+      generateDesigns();
+    }
+  };
+  
+  // Move to the previous step
+  const goToPreviousStep = () => {
+    if (currentStep === "project-details") {
+      setCurrentStep("select-project");
+    } else if (currentStep === "design-preferences") {
+      setCurrentStep("project-details");
+    } else if (currentStep === "upload-photos") {
+      setCurrentStep("design-preferences");
+    } else if (currentStep === "review") {
+      setCurrentStep("upload-photos");
+    } else if (currentStep === "results") {
+      // Allow users to go back and modify inputs
+      setCurrentStep("review");
+    }
+  };
+  
+  // Handle photo upload
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const newFiles = Array.from(e.target.files);
+      
+      // Create preview URLs for the new files
+      const newPreviews = newFiles.map(file => URL.createObjectURL(file));
+      
+      setPhotos([...photos, ...newFiles]);
+      setPhotosPreviews([...photosPreviews, ...newPreviews]);
+    }
+  };
+  
+  // Remove a photo
+  const removePhoto = (index: number) => {
+    // Clean up the preview URL to prevent memory leaks
+    URL.revokeObjectURL(photosPreviews[index]);
+    
+    const updatedPhotos = [...photos];
+    updatedPhotos.splice(index, 1);
+    
+    const updatedPreviews = [...photosPreviews];
+    updatedPreviews.splice(index, 1);
+    
+    setPhotos(updatedPhotos);
+    setPhotosPreviews(updatedPreviews);
+  };
+  
+  // Generate AI designs
+  const generateDesigns = () => {
+    setCurrentStep("generating");
+    setIsGenerating(true);
+    
+    // This would actually call OpenAI API
+    // For now, we'll simulate a response after a delay
+    setTimeout(() => {
+      // Example response - in a real implementation, these would be URLs to images generated by OpenAI
+      const mockDesigns = [
+        "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?w=800&h=600&q=80",
+        "https://images.unsplash.com/photo-1609348445429-a21297ae2499?w=800&h=600&q=80",
+        "https://images.unsplash.com/photo-1617103996702-96ff29b1c467?w=800&h=600&q=80"
+      ];
+      
+      setGeneratedDesigns(mockDesigns);
+      setSelectedDesign(0); // Select the first design by default
+      setIsGenerating(false);
+      setCurrentStep("results");
+    }, 3000);
+  };
+  
+  // In a real implementation, this would use the OpenAI API
+  const generateMoreVariations = () => {
+    setIsGenerating(true);
+    
+    // Simulate a response after a delay
+    setTimeout(() => {
+      // New variations
+      const newVariations = [
+        "https://images.unsplash.com/photo-1601084881623-cdf9a8ea242c?w=800&h=600&q=80",
+        "https://images.unsplash.com/photo-1617103996702-96ff29b1c467?w=800&h=600&q=80",
+        "https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?w=800&h=600&q=80"
+      ];
+      
+      setGeneratedDesigns(newVariations);
+      setSelectedDesign(0);
+      setIsGenerating(false);
+    }, 3000);
+  };
+  
+  // In a real implementation, this would save the image
+  const downloadDesign = () => {
+    if (selectedDesign !== null) {
+      window.open(generatedDesigns[selectedDesign], "_blank");
+    }
+  };
+  
+  // Function to check if the current step is complete
+  const isStepComplete = () => {
+    if (currentStep === "project-details") {
+      return projectDetails.dimensions !== "" && projectDetails.requirements !== "";
+    } else if (currentStep === "design-preferences") {
+      return designPreferences.style !== "";
+    } else if (currentStep === "upload-photos") {
+      return true; // Photos are optional
+    } else if (currentStep === "review") {
+      return true; // Review is always complete
+    }
+    return false;
+  };
+  
+  return (
+    <section id="ai-design" className="mb-8">
+      <Card className="bg-gray-900 border-gray-800">
+        <CardContent className="p-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+            <div>
+              <h2 className="text-2xl font-bold flex items-center text-white mb-1">
+                <Sparkles className="mr-2 text-primary" /> AI Design Tool
+              </h2>
+              <p className="text-gray-400 text-sm">
+                Create custom 3D designs for your projects using AI - just answer a few questions
+              </p>
+            </div>
+            
+            {/* Progress indicator */}
+            {projectType && currentStep !== "select-project" && currentStep !== "results" && (
+              <div className="hidden md:flex items-center space-x-2 mt-4 md:mt-0">
+                {["project-details", "design-preferences", "upload-photos", "review"].map((step, index) => (
+                  <div 
+                    key={step} 
+                    className={`h-2 w-8 rounded-full ${
+                      currentStep === step ? "bg-primary" :
+                      currentStep === "generating" ? "bg-primary" :
+                      ["generating", "results"].includes(currentStep) ? "bg-primary" :
+                      (currentStep === "design-preferences" && index === 0) ||
+                      (currentStep === "upload-photos" && index <= 1) ||
+                      (currentStep === "review" && index <= 2) ? "bg-primary" :
+                      "bg-gray-700"
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+          
+          {/* Project Type Selection */}
+          {currentStep === "select-project" && (
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-4">What type of project are you designing?</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {projectTypes.map((type) => (
+                  <button
+                    key={type.id}
+                    onClick={() => handleSelectProject(type.id)}
+                    className="bg-gray-800 border border-gray-700 rounded-lg p-4 text-center hover:border-primary hover:bg-gray-700/50 transition-colors"
+                  >
+                    <div className="text-3xl mb-2">{type.icon}</div>
+                    <div className="text-white font-medium">{type.name}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Project Details */}
+          {currentStep === "project-details" && (
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-4">Tell us about your {projectType} project</h3>
+              
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-white font-medium mb-1">Dimensions / Size</label>
+                  <input 
+                    type="text"
+                    placeholder="e.g., 10ft x 12ft, 20 square meters"
+                    className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white"
+                    value={projectDetails.dimensions}
+                    onChange={(e) => handleProjectDetailsChange("dimensions", e.target.value)}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-white font-medium mb-1">Approximate Budget (optional)</label>
+                  <input 
+                    type="text"
+                    placeholder="e.g., £5,000, £10,000-£15,000"
+                    className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white"
+                    value={projectDetails.budget}
+                    onChange={(e) => handleProjectDetailsChange("budget", e.target.value)}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-white font-medium mb-1">Project Timeline (optional)</label>
+                  <input 
+                    type="text"
+                    placeholder="e.g., 2 weeks, 3 months"
+                    className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white"
+                    value={projectDetails.timeline}
+                    onChange={(e) => handleProjectDetailsChange("timeline", e.target.value)}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-white font-medium mb-1">Specific Requirements</label>
+                  <textarea 
+                    placeholder="Describe what you need for this space..."
+                    className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white min-h-[100px]"
+                    value={projectDetails.requirements}
+                    onChange={(e) => handleProjectDetailsChange("requirements", e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-between">
+                <Button 
+                  variant="outline"
+                  onClick={goToPreviousStep}
+                  className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                >
+                  Back
+                </Button>
+                <Button
+                  disabled={!isStepComplete()}
+                  onClick={goToNextStep}
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  Next: Design Preferences
+                </Button>
+              </div>
+            </div>
+          )}
+          
+          {/* Design Preferences */}
+          {currentStep === "design-preferences" && (
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-4">Design Style & Preferences</h3>
+              
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-white font-medium mb-1">Design Style</label>
+                  <select
+                    className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white"
+                    value={designPreferences.style}
+                    onChange={(e) => handleDesignPreferencesChange("style", e.target.value)}
+                  >
+                    <option value="">Select a style...</option>
+                    {designStyles.map(style => (
+                      <option key={style.id} value={style.id}>{style.name}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-white font-medium mb-1">Color Preferences</label>
+                  <input 
+                    type="text"
+                    placeholder="e.g., earth tones, blues and grays, bright colors"
+                    className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white"
+                    value={designPreferences.colors}
+                    onChange={(e) => handleDesignPreferencesChange("colors", e.target.value)}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-white font-medium mb-1">Preferred Materials</label>
+                  <input 
+                    type="text"
+                    placeholder="e.g., wood, stone, metal, glass"
+                    className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white"
+                    value={designPreferences.materials}
+                    onChange={(e) => handleDesignPreferencesChange("materials", e.target.value)}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-white font-medium mb-1">Must-Have Elements</label>
+                  <input 
+                    type="text"
+                    placeholder="e.g., outdoor seating, walk-in shower"
+                    className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white"
+                    value={designPreferences.mustHave}
+                    onChange={(e) => handleDesignPreferencesChange("mustHave", e.target.value)}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-white font-medium mb-1">Elements to Avoid</label>
+                  <input 
+                    type="text"
+                    placeholder="e.g., carpet, bright colors"
+                    className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white"
+                    value={designPreferences.avoid}
+                    onChange={(e) => handleDesignPreferencesChange("avoid", e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-between">
+                <Button 
+                  variant="outline"
+                  onClick={goToPreviousStep}
+                  className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                >
+                  Back
+                </Button>
+                <Button
+                  disabled={!isStepComplete()}
+                  onClick={goToNextStep}
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  Next: Upload Photos
+                </Button>
+              </div>
+            </div>
+          )}
+          
+          {/* Photo Upload */}
+          {currentStep === "upload-photos" && (
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-2">Upload Reference Photos</h3>
+              <p className="text-gray-400 text-sm mb-4">
+                Upload photos of your current space or inspiration images to help the AI understand your vision. (Optional but recommended)
+              </p>
+              
+              <div className="mb-6">
+                <div className="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center mb-4">
+                  <Camera className="h-12 w-12 mx-auto mb-4 text-gray-600" />
+                  <p className="text-gray-400 mb-4">
+                    Drag and drop your photos here, or click to browse
+                  </p>
+                  <input
+                    type="file"
+                    id="photo-upload"
+                    multiple
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handlePhotoUpload}
+                  />
+                  <Button
+                    onClick={() => document.getElementById("photo-upload")?.click()}
+                    variant="outline"
+                    className="border-gray-700 text-gray-300"
+                  >
+                    <Upload className="mr-2 h-4 w-4" /> Select Photos
+                  </Button>
+                </div>
+                
+                {photosPreviews.length > 0 && (
+                  <div>
+                    <h4 className="font-medium text-white mb-2">Uploaded Photos</h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                      {photosPreviews.map((preview, index) => (
+                        <div key={index} className="relative group">
+                          <img 
+                            src={preview} 
+                            alt={`Reference ${index + 1}`} 
+                            className="w-full h-24 object-cover rounded-md"
+                          />
+                          <button
+                            onClick={() => removePhoto(index)}
+                            className="absolute top-1 right-1 bg-black bg-opacity-70 rounded-full p-1 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <XCircle size={16} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex justify-between">
+                <Button 
+                  variant="outline"
+                  onClick={goToPreviousStep}
+                  className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                >
+                  Back
+                </Button>
+                <Button
+                  onClick={goToNextStep}
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  Next: Review & Generate
+                </Button>
+              </div>
+            </div>
+          )}
+          
+          {/* Review */}
+          {currentStep === "review" && (
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-4">Review Your Information</h3>
+              
+              <div className="space-y-4 mb-6">
+                <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                  <h4 className="font-medium text-white mb-2">Project Type</h4>
+                  <p className="text-gray-300">
+                    {projectTypes.find(t => t.id === projectType)?.name || projectType}
+                  </p>
+                </div>
+                
+                <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                  <h4 className="font-medium text-white mb-2">Project Details</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-gray-400 text-sm">Dimensions:</p>
+                      <p className="text-gray-300">{projectDetails.dimensions || "Not specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-sm">Budget:</p>
+                      <p className="text-gray-300">{projectDetails.budget || "Not specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-sm">Timeline:</p>
+                      <p className="text-gray-300">{projectDetails.timeline || "Not specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-sm">Requirements:</p>
+                      <p className="text-gray-300">{projectDetails.requirements || "Not specified"}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                  <h4 className="font-medium text-white mb-2">Design Preferences</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-gray-400 text-sm">Style:</p>
+                      <p className="text-gray-300">
+                        {designStyles.find(s => s.id === designPreferences.style)?.name || designPreferences.style || "Not specified"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-sm">Colors:</p>
+                      <p className="text-gray-300">{designPreferences.colors || "Not specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-sm">Materials:</p>
+                      <p className="text-gray-300">{designPreferences.materials || "Not specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-sm">Must-Have Elements:</p>
+                      <p className="text-gray-300">{designPreferences.mustHave || "Not specified"}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400 text-sm">Elements to Avoid:</p>
+                      <p className="text-gray-300">{designPreferences.avoid || "Not specified"}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                {photosPreviews.length > 0 && (
+                  <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                    <h4 className="font-medium text-white mb-2">Reference Photos</h4>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                      {photosPreviews.map((preview, index) => (
+                        <img 
+                          key={index}
+                          src={preview} 
+                          alt={`Reference ${index + 1}`} 
+                          className="w-full h-16 object-cover rounded-md"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex justify-between">
+                <Button 
+                  variant="outline"
+                  onClick={goToPreviousStep}
+                  className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                >
+                  Back to Edit
+                </Button>
+                <Button
+                  onClick={goToNextStep}
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  Generate AI Designs
+                </Button>
+              </div>
+            </div>
+          )}
+          
+          {/* Generating */}
+          {currentStep === "generating" && (
+            <div className="py-12 text-center">
+              <div className="mb-6">
+                <Loader2 className="h-12 w-12 mx-auto animate-spin text-primary" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">Generating Your Designs</h3>
+              <p className="text-gray-400 max-w-md mx-auto">
+                Our AI is working on creating custom designs based on your preferences. This typically takes 30-60 seconds.
+              </p>
+            </div>
+          )}
+          
+          {/* Results */}
+          {currentStep === "results" && (
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-4">Your Custom AI-Generated Designs</h3>
+              
+              <div className="mb-6">
+                {selectedDesign !== null && (
+                  <div className="mb-4">
+                    <div className="aspect-video bg-gray-800 rounded-lg overflow-hidden">
+                      <img 
+                        src={generatedDesigns[selectedDesign]} 
+                        alt="Generated design" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                )}
+                
+                <div className="grid grid-cols-3 gap-2 mb-4">
+                  {generatedDesigns.map((design, index) => (
+                    <div 
+                      key={index}
+                      className={`cursor-pointer rounded-md overflow-hidden border-2 ${
+                        selectedDesign === index ? 'border-primary' : 'border-transparent'
+                      }`}
+                      onClick={() => setSelectedDesign(index)}
+                    >
+                      <img 
+                        src={design} 
+                        alt={`Design option ${index + 1}`} 
+                        className="w-full h-20 object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="flex flex-wrap gap-2 justify-center">
+                  <Button 
+                    variant="outline" 
+                    className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                    onClick={downloadDesign}
+                    disabled={selectedDesign === null}
+                  >
+                    <Download size={16} className="mr-2" /> Save Design
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                    disabled={isGenerating}
+                    onClick={generateMoreVariations}
+                  >
+                    {isGenerating ? (
+                      <>
+                        <Loader2 size={16} className="mr-2 animate-spin" /> Generating...
+                      </>
+                    ) : (
+                      <>
+                        <RefreshCw size={16} className="mr-2" /> Generate More Variations
+                      </>
+                    )}
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                  >
+                    <Share2 size={16} className="mr-2" /> Share Design
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4">
+                <h4 className="font-medium text-white mb-2">Want to Bring This Design to Life?</h4>
+                <p className="text-gray-300 text-sm mb-4">
+                  Connect with qualified trade professionals who can help implement your design properly and to the highest standards.
+                </p>
+                <Button className="bg-primary hover:bg-primary/90 w-full sm:w-auto">
+                  Find Trusted Professionals
+                </Button>
+              </div>
+              
+              <div className="mt-6 text-center">
+                <Button 
+                  variant="ghost"
+                  className="text-gray-400 hover:text-white"
+                  onClick={() => {
+                    // Reset the form and start over
+                    setCurrentStep("select-project");
+                    setProjectType(null);
+                    setProjectDetails({
+                      dimensions: "",
+                      budget: "",
+                      timeline: "",
+                      requirements: ""
+                    });
+                    setDesignPreferences({
+                      style: "",
+                      colors: "",
+                      materials: "",
+                      mustHave: "",
+                      avoid: ""
+                    });
+                    setPhotos([]);
+                    setPhotosPreviews([]);
+                    setGeneratedDesigns([]);
+                    setSelectedDesign(null);
+                  }}
+                >
+                  Start a New Design Project
+                </Button>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </section>
+  );
+};
+
+export default AIDesignTool;

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="200" height="50" viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tool Icon -->
+  <path d="M25 10C25 7.79086 26.7909 6 29 6H35C37.2091 6 39 7.79086 39 10V14C39 16.2091 37.2091 18 35 18H32V38C32 40.2091 30.2091 42 28 42C25.7909 42 24 40.2091 24 38V18H21C18.7909 18 17 16.2091 17 14V10C17 7.79086 18.7909 6 21 6H29" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/>
+  <!-- Wrench Handle -->
+  <path d="M39 30C43.4183 30 47 33.5817 47 38C47 42.4183 43.4183 46 39 46C34.5817 46 31 42.4183 31 38" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Text "TRADECOACH" -->
+  <text x="60" y="32" font-family="Arial, sans-serif" font-weight="bold" font-size="20" fill="#FFFFFF">TRADECOACH</text>
+</svg>
